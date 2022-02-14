@@ -15,6 +15,28 @@ const inputUserNameGithub = document.getElementById("user-name-github");
 
 let userNameGithub = "AhmedQeshta";
 
+
+
+// -------------- *** 🙉  Fetch Data function 🙉 *** ----------------------
+
+const addListener = (selector, eventName, callback) => {
+    document.querySelector(selector).addEventListener(eventName, callback);
+};
+
+function fetchData(method, url, callback) {
+    let xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            callback(null, xhr.responseText);
+        } else {
+            let errorMessage = xhr.responseText;
+            callback(`Error ${url}`, errorMessage);
+        }
+    };
+    xhr.open(method, url, true);
+    xhr.send();
+}
+
 // -------------------- *** 🙉 Start  helper functions 🙉 *** ----------------------
 
 // -------------------------- get Languages functions  ---------------
@@ -38,27 +60,9 @@ function getUsername(user) {
     return user.login;
 }
 
-// -------------- *** 🙉  Fetch Data function 🙉 *** ----------------------
-
-function fetchData(method, url, callback) {
-    let xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            callback(null, xhr.responseText);
-        } else {
-            let errorMessage = xhr.responseText;
-            callback(`Error ${url}`, errorMessage);
-        }
-    };
-    xhr.open(method, url, true);
-    xhr.send();
-}
-
-const addListener = (selector, eventName, callback) => {
-    document.querySelector(selector).addEventListener(eventName, callback);
-};
-
 // -------------------- *** 😉🙋🏻‍♀️ End  helper functions 🙋🏻‍♂️ *** ----------------------
+
+
 
 // -------------------- *** 🙉 render Result Dom 🙉 *** ----------------------
 const renderResultDom = (responseObject) => {
@@ -84,7 +88,7 @@ const renderResultDom = (responseObject) => {
 const handelResponseUserDetails = (responseAsJSONString) => {
     let response = JSON.parse(responseAsJSONString);
     console.log(response);
-    
+
     return {
         userDetails: {
             name: response[0].owner.login,
