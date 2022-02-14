@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "qunit"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/GSG-G11/Ahmed-And-jehad-github-api-ws#readme",
   "devDependencies": {
+    "jest": "^27.5.1",
     "nyc": "^15.1.0",
     "qunit": "^2.17.2"
   }

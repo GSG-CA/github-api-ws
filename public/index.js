@@ -13,6 +13,7 @@ const githubRepoWatchers = document.getElementById("github-repo-watchers");
 const githubRepoContributors = document.getElementById(
     "github-repo-contributors",
 );
+const inputUserNameGithub = document.getElementById("user-name-github");
 
 let userNameGithub = "AhmedQeshta";
 
@@ -39,55 +40,59 @@ function getUsername(user) {
     return user.login;
 }
 
-// -------------- *** 🙉  Fetch Data function 🙉 *** ---------------------- 
+// -------------- *** 🙉  Fetch Data function 🙉 *** ----------------------
 
-function fetchData(method,url, callback) {
+function fetchData(method, url, callback) {
     let xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
-                callback(null, xhr.responseText);
-        }else {
+            callback(null, xhr.responseText);
+        } else {
             let errorMessage = xhr.responseText;
-            callback(`Error ${url}`,errorMessage);
+            callback(`Error ${url}`, errorMessage);
         }
     };
     xhr.open(method, url, true);
     xhr.send();
 }
 
-// -------------------- *** 😉🙋🏻‍♀️ End  helper functions 🙋🏻‍♂️ *** ----------------------
+const addListener = (selector, eventName, callback) => {
+    document.querySelector(selector).addEventListener(eventName, callback);
+};
 
+// -------------------- *** 😉🙋🏻‍♀️ End  helper functions 🙋🏻‍♂️ *** ----------------------
 
 // -------------------- *** 🙉 render Result Dom 🙉 *** ----------------------
 const renderResultDom = (responseObject) => {
-    console.log(responseObject);
-    githubUserHandle.textContent = userNameGithub;
-    githubUserLink.href = `https://github.com/${userNameGithub}`;
+    githubUserHandle.textContent = responseObject.userDetails.name;
+    githubUserLink.href = `https://github.com/${responseObject.userDetails.name}`;
     githubUserAvatar.src = responseObject.userDetails.img;
     githubUserRepos.textContent = responseObject.userDetails.repos;
-    githubReposLanguages.textContent =responseObject.userDetails.languages.join(", ");
+    githubReposLanguages.textContent =
+        responseObject.userDetails.languages.join(", ");
     githubReposStars.textContent = responseObject.userDetails.stars;
     githubRepoName.textContent = responseObject.firstRepo.name;
     githubRepoLink.href = responseObject.firstRepo.url;
     githubRepoCreated.textContent = responseObject.firstRepo.created;
     githubRepoOpen.textContent = responseObject.firstRepo.issues;
     githubRepoWatchers.textContent = responseObject.firstRepo.watchers;
-    githubRepoContributors.textContent = responseObject.firstRepo.contributors.join(", ");
+    githubRepoContributors.textContent =
+        responseObject.firstRepo.contributors.join(", ");
     return;
 };
 
-
-
 // -------------- *** 🙉 Function For handle To Dom functions | success handlers 🙉 *** ---------------------
 
-const handelResponseUserDetails = (responseAsJSONString)=> {
+const handelResponseUserDetails = (responseAsJSONString) => {
     let response = JSON.parse(responseAsJSONString);
+
     return {
         userDetails: {
+            name: response[0].owner.login,
             img: response[0].owner.avatar_url,
             repos: response.length,
-            languages: getProgramingLanguages(response),//I Get this method form Stack over Flow
-            stars: countStars(response),//I Get this method form Stack over Flow
+            languages: getProgramingLanguages(response), //I Get this method form Stack over Flow
+            stars: countStars(response), //I Get this method form Stack over Flow
         },
         firstRepo: {
             name: response[0].name,
@@ -99,47 +104,49 @@ const handelResponseUserDetails = (responseAsJSONString)=> {
             contributors: [],
         },
     };
-}
+};
 
-const handelResponseContributorDetails = (responseObject, responseAsJSONString) =>{
+const handelResponseContributorDetails = (
+    responseObject,
+    responseAsJSONString,
+) => {
     let response = JSON.parse(responseAsJSONString);
     let contributors = response.map(getUsername);
     let firstRepo = Object.assign({}, responseObject.firstRepo, {
         contributors: contributors,
     });
     return Object.assign({}, responseObject, { firstRepo: firstRepo });
-}
-
-
-
-
+};
 
 const getContributors = (details) => {
     let url = details.firstRepo.contributors_url;
     let method = "GET";
-    fetchData(method,url, (error, response) => {
+    fetchData(method, url, (error, response) => {
         if (error) {
-            // console.log("Sorry! 😭",error);
             return;
         }
         renderResultDom(handelResponseContributorDetails(details, response));
         return;
     });
-}
+};
 
-const  getUserRepoDetails = (userNameGithub) => {
+const getUserRepoDetails = (userNameGithub) => {
     let URL = `https://api.github.com/users/${userNameGithub}/repos`;
     let method = "GET";
-    fetchData(method,URL, (error, response) => {
+    fetchData(method, URL, (error, response) => {
         if (error) {
-            console.log("Sorry! 😭",error);
+            // console.log("Sorry! 😭", error);
             return;
         }
         getContributors(handelResponseUserDetails(response));
         return;
     });
-}
-
-
+};
 
 getUserRepoDetails(userNameGithub);
+
+addListener(".user-name-github", "keyup", () => {
+    setTimeout(() => {
+        getUserRepoDetails(inputUserNameGithub.value);
+    },1500);
+});
