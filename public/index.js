@@ -10,9 +10,7 @@ const githubRepoLink = document.getElementById("github-repo-link");
 const githubRepoCreated = document.getElementById("github-repo-created");
 const githubRepoOpen = document.getElementById("github-repo-open-issues");
 const githubRepoWatchers = document.getElementById("github-repo-watchers");
-const githubRepoContributors = document.getElementById(
-    "github-repo-contributors",
-);
+const githubRepoContributors = document.getElementById("github-repo-contributors");
 const inputUserNameGithub = document.getElementById("user-name-github");
 
 let userNameGithub = "AhmedQeshta";
@@ -85,7 +83,8 @@ const renderResultDom = (responseObject) => {
 
 const handelResponseUserDetails = (responseAsJSONString) => {
     let response = JSON.parse(responseAsJSONString);
-
+    console.log(response);
+    
     return {
         userDetails: {
             name: response[0].owner.login,
