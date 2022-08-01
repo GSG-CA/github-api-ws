@@ -81,7 +81,7 @@ What problems can you foresee?
 
 ### Challenge 2: adapt your app for different users!
 
-At the moment, your app is just getting data about one GitHub user. But what if you wanted to use it to compare everyone from G10? Or to get data about a custom GitHub user? How might you adapt your application for this purpose?
+At the moment, your app is just getting data about one GitHub user. But what if you wanted to use it to compare everyone from your cohort? Or to get data about a custom GitHub user? How might you adapt your application for this purpose?
 
 Try and sketch out a plan!
 
