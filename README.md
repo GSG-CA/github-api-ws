@@ -35,7 +35,12 @@ Once you've got your access token, you can add it to the URLs you call like this
 
 For an example: this's for github user `octocat`'s organizations
 
-`https://api.github.com/users/octocat/orgs?access_token=YOUR_ACCESS_TOKEN`
+`https://api.github.com/users/octocat/orgs`
+
+To set access token to `xhr` we need to do this
+```js
+  xhr.setRequestHeader("Authorization", "Bearer <genreatedToken>")
+```
 
 Try and complete Task 1 with at least 2 tests and don't rush ahead to the challenges. This is the most important part of today's workshop. The other parts should be treated as extra challenges.
 
